@@ -1,5 +1,30 @@
+.nav {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    background-color: #c9f30e;
+}
 body {
-    background-color: blue;
     display: flex;
     flex-direction: column;
+}
+
+/* Style for mobile https://www.w3schools.com/cssref/atrule_media.php */
+@media screen and (max-width:768px) {
+    .desktop {
+        display: none;
+    }
+    body {
+        background-color: white;
+    }
+}
+
+/* Style for Desktop */
+@media screen and (min-width:769px) {
+    .mobile {
+        display: none;
+    }
+    body {
+        background-color: pink;
+    }
 }
