@@ -1,20 +1,17 @@
 $(document).ready(function() {
     console.log('Document ready');
-    const table = basicTable();
-    $('#newTable').html(table);
 });
 $("#testBtn").click(function() {
     alert("Click button");
     $(this).hide();
 });
 $("#genTable").click(function() {
-    alert("Create table");
+    $('#newTable').html(basicTable());
 });
 function basicTable() {
   let html = '<table>';
-  html +='<tr>';
-  html +='<th>Name</th>';
-  html +='</tr>';
+  html +='<tr><th>Name</th></tr>';
+  html +='<tr><td>ToanDX</td></tr>';
   html +='</table>';
   return html;
 }
