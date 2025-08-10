@@ -9,6 +9,28 @@ class MyTable {
       html +='</table>';
       return html;
   }
+  getNote() {
+    let html = '<table>';
+    html +='<tr><th>title</th><th>content</th></tr>';
+    $.ajax({
+        url: "https://demobackend-htic.onrender.com/api/note",       // Target JSP to handle the request
+        type: "GET",
+        success: function(response) {
+            console.log('Data received:', response);
+            for(let i = 0; i < response.length; ++i) {
+                console.log('i '+JSON.stringify(response[i]));
+                html +='<tr><td>'+response[i].title+'</td><td>'+response[i].content+'</td></tr>';
+            }
+            $('#helloTxt').html('Data received:'+ JSON.stringify(response));
+        },
+        error: function(error) {
+            console.error('Error:', error);
+            $('#helloTxt').html('Error:'+JSON.stringify(error));
+        }
+    });
+    html +='</table>';
+    return html;
+  }
   greet() {
     console.log(`Hello, ${this.name}`);
   }
@@ -26,7 +48,8 @@ $("#send").click(function() {
 $("#genTable").click(function() {
     const myTable = new MyTable('Toan');
     console.log(myTable.render());
-    $('#newTable').html(myTable.render());
+    // $('#newTable').html(myTable.render());
+    $('#newTable').html(myTable.getNote());
 });
 function sendPost() {
     $.ajax({
