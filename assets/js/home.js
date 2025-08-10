@@ -33,10 +33,12 @@ function sendPost() {
         url: "https://demobackend-htic.onrender.com/api/hello",       // Target JSP to handle the request
         type: "GET",
         success: function(response) {
-        console.log('Data received:', response);
+            console.log('Data received:', response);
+            $('#helloTxt').html('Data received:'+ JSON.stringify(response));
         },
         error: function(error) {
-        console.error('Error:', error);
+            console.error('Error:', error);
+            $('#helloTxt').html('Error:'+JSON.stringify(error));
         }
     });
 }
