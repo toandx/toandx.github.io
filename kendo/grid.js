@@ -1,12 +1,51 @@
-function drawTable() {
+function drawGrid1() { // Rows template
+  var myDataSource = new kendo.data.DataSource({
+    data: [
+      { school: 'HQV', firstName:'Toan',lastName:'Dong', score:9},
+      { school: 'HQV', firstName:'Oanh',lastName:'Dong', score:8},
+      { school: 'HSGS', firstName:'Dat',lastName:'Vu', score:10}
+    ],
+    pageSize: 5
+  });
+
+  // Step 2: Create Grid and bind DataSource
+  $("#grid1").kendoGrid({
+      dataSource: myDataSource,
+      pageable: true,
+      sortable: true,
+      /* #: school # = <field school> */
+      columns: [
+          { field: "school", title: "School"},
+          {
+            title:'Name',
+            columns: [
+              { field: 'firstName', title:'First name'},
+              { field: 'lastName', title:'Last name'},
+            ]
+          },
+          { field:'score', title:'Score'}
+      ],
+      rowTemplate: function(data) {
+        return formatRow(data);
+      }
+  });
+}
+function formatRow(data) {
+  if (data.score<9) {
+    return "<tr><td>"+data.school+'</td></tr>';
+  } else if (data.score>9) {
+    return "<tr><td>"+data.firstName+'</td></tr>';
+  } else {
+    return "<tr><td>"+data.score+'</td></tr>';
+  }
+}
+function drawGrid2() { // Column template
   var myDataSource = new kendo.data.DataSource({
       data: [
           { school: 'HQV', firstName:'Toan',lastName:'Dong', score:9},
           { school: 'HQV', firstName:'Oanh',lastName:'Dong', score:8},
           { school: 'HSGS', firstName:'Dat',lastName:'Vu', score:10}
       ],
-      // group: {field: 'school'},
-      sort: {field: 'school', dir:'asc'},
       schema: {
           model: {
               id: "id",
@@ -19,34 +58,17 @@ function drawTable() {
   });
 
   // Step 2: Create Grid and bind DataSource
-  $("#grid").kendoGrid({
+  $("#grid2").kendoGrid({
       dataSource: myDataSource,
       pageable: true,
       sortable: true,
-      dataBound: function() {
-        var grid = this;
-        var rows = grid.tbody.find("tr");
-        var prevClass = null, rowspan = 1, firstCell;
-
-        rows.each(function() {
-            var cell = $(this).find("td:first"); // assuming className is first column
-            var text = cell.text();
-
-            if (text === prevClass) {
-                cell.remove(); // remove duplicate cell
-                rowspan++;
-                firstCell.attr("rowspan", rowspan)
-                        .css("vertical-align", "middle")
-                        .css("text-align", "center");
-            } else {
-                prevClass = text;
-                rowspan = 1;
-                firstCell = cell;
-            }
-        });
-      },
+      /* #: school # = <field school> */
       columns: [
-          { field: "school", title: "School" },
+          { field: "school", title: "School", 
+            template: function(data) {
+              return formatSchool(data);
+            }
+          },
           {
             title:'Name',
             columns: [
@@ -58,7 +80,16 @@ function drawTable() {
       ]
   });
 }
-
+function formatSchool(data) {
+  if (data.score<9) {
+    return "<p> Good student learn at "+data.school+'</p>';
+  } else if (data.score>9) {
+    return "<p> Excellent student learn at "+data.school+'</p>';
+  } else {
+    return "<p> Best student learn at "+data.school+'</p>';
+  }
+}
 $(document).ready(function() {
-  drawTable();
+  drawGrid1();
+  drawGrid2();
 });
