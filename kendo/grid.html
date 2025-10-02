@@ -6,11 +6,50 @@
         <link href="kendo/default-main.css" rel="stylesheet" />
         <script src="../assets/js/jquery-3.7.1.min.js"></script>
         <script src="kendo/kendo.all.min.js"></script>
+        <style>
+          table {
+            border-collapse: collapse; /* Collapses borders into a single line */
+          }
+          table, th, td {
+            border: 1px solid black; /* 1px solid black border */
+          }
+        </style>
     </head>
     <body>
       <h1> Kendo Grid </h1>
       <div id="grid1"></div>
       <div id="grid2"></div>
+      <table id="basicTable">
+        <tr>
+          <th>School</th>
+          <th>Class</th>
+          <th>Name</th>
+        </tr>
+        <tr data-st="IP">
+          <td rowspan="3">HQV</td>
+          <td>12C3</td>
+          <td>Toan</td>
+        </tr>
+        <tr data-st="DO">
+          <td>12C2</td>
+          <td>Oanh</td>
+        </tr>
+        <tr>
+          <td colspan="2"><button id="show1">Show/Hide</button></td>
+        </tr>
+        <tr data-st="IP">
+          <td rowspan="3">HSGS</td>
+          <td>12C1</td>
+          <td>Dat</td>
+        </tr>
+        <tr data-st="DO">
+          <td>12C1</td>
+          <td>Duy Anh</td>
+        </tr>
+        <tr>
+          <td colspan="2"><button id="show2">Show/Hide</button></td>
+        </tr>
+      </table>
       <script src="./grid.js"></script>
     </body>
 </html>

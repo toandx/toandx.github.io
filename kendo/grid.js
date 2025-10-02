@@ -89,6 +89,18 @@ function formatSchool(data) {
     return "<p> Best student learn at "+data.school+'</p>';
   }
 }
+$("#show1").click(function() {
+    $("#basicTable tr").each(function(index) {
+      if(index === 0) return; // skip header
+      let st = $(this).data("st");
+      console.log('Status '+st);
+      if(st !== 'DO'){
+        $(this).show();
+      } else {
+        $(this).hide();
+      }
+    });
+  });
 $(document).ready(function() {
   drawGrid1();
   drawGrid2();
