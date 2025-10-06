@@ -90,14 +90,22 @@ function formatSchool(data) {
   }
 }
 $("#show1").click(function() {
-    $("#basicTable tr").each(function(index) {
-      if(index === 0) return; // skip header
+    let cntRowSpan = 0;
+    $('#hqv tr[data-st="IP"]').each(function(index,row) {
+      cntRowSpan += 1;
+    });
+    $('#hqv tr[data-st="IP"]').each(function(index,row) {
+      $(row).attr("rowspan",cntRowSpan+1);
+      // Do something with each row
+      console.log('List tr:'+$(row).text());
+    });
+    $("#hqv tr").each(function(index) {
       let st = $(this).data("st");
       console.log('Status '+st);
-      if(st !== 'DO'){
-        $(this).show();
-      } else {
+      if(st != null && st == 'DO'){
         $(this).hide();
+      } else {
+        $(this).show();
       }
     });
   });
