@@ -1,13 +1,20 @@
+var prevData = null;
+var myData = [
+  { school: 'HQV', name:'Toan', status:'IP'},
+  { school: 'HQV', name:'Oanh', status:'DO'},
+  { school: 'HQV', name:'Loc', status:'DO'},
+  { school: 'HQV', name:'Quang Linh', status:'DO'},
+  { school: 'HSGS', name:'Anh', status:'DO'},
+  { school: 'HSGS', name:'Dat', status:'IP'},
+  { school: 'HSGS', name:'Tien', status:'IP'}
+];
+var hideMp = new Set();
 function drawGrid1() { // Rows template
   var myDataSource = new kendo.data.DataSource({
-    data: [
-      { school: 'HQV', firstName:'Toan',lastName:'Dong', score:9},
-      { school: 'HQV', firstName:'Oanh',lastName:'Dong', score:8},
-      { school: 'HSGS', firstName:'Dat',lastName:'Vu', score:10}
-    ],
-    pageSize: 5
+    data: myData,
+    pageSize: 100
   });
-
+  console.log(JSON.stringify(myDataSource.data()));
   // Step 2: Create Grid and bind DataSource
   $("#grid1").kendoGrid({
       dataSource: myDataSource,
@@ -16,29 +23,49 @@ function drawGrid1() { // Rows template
       /* #: school # = <field school> */
       columns: [
           { field: "school", title: "School"},
-          {
-            title:'Name',
-            columns: [
-              { field: 'firstName', title:'First name'},
-              { field: 'lastName', title:'Last name'},
-            ]
-          },
-          { field:'score', title:'Score'}
+          { field: 'name', title:'Name'},
+          { field:'status', title:'Status'}
       ],
-      rowTemplate: function(data) {
-        return formatRow(data);
-      }
+      rowTemplate: (data) => formatRow(data)
   });
 }
 function formatRow(data) {
-  if (data.score<9) {
-    return "<tr><td>"+data.school+'</td></tr>';
-  } else if (data.score>9) {
-    return "<tr><td>"+data.firstName+'</td></tr>';
-  } else {
-    return "<tr><td>"+data.score+'</td></tr>';
+  let html = '<tr>';
+  if (prevData == null || data.school != prevData.school) {
+    var grid = $("#grid1").data("kendoGrid");
+    var viewData = grid.dataSource.view();
+    let cnt = 0;
+    for(const e of viewData) {
+      if (e.school === data.school) cnt++;
+    }
+    html += '<td rowspan="'+cnt+'">'+data.school+'</td>';
+  }
+  html += '<td>'+data.name+'</td>';
+  html += '<td>'+data.status+'</td>';
+  html += '</tr>';
+  prevData = data;
+  return html;
+}
+function filter() {
+  var grid = $("#grid1").data("kendoGrid");
+  /*grid.dataSource.filter({
+    field: "status",
+    operator: "eq",
+    value: "IP"
+  });*/
+  var originalData = grid.dataSource.data();
+  var filteredData = originalData.filter(myCustomFilter);
+  grid.dataSource.data(filteredData);
+}
+function hideMp(mpNo) {
+  if (!hideMp.has(mpNo)) {
+    hideMp.add(mpNo);
   }
 }
+function myCustomFilter(item) {
+  return item.school != 'HQV' || item.status == 'IP';
+}
+
 function drawGrid2() { // Column template
   var myDataSource = new kendo.data.DataSource({
       data: [
@@ -111,5 +138,6 @@ $("#show1").click(function() {
   });
 $(document).ready(function() {
   drawGrid1();
-  drawGrid2();
+  filter();
+  // drawGrid2();
 });

@@ -3,9 +3,7 @@
         <title>Kendo Grid</title>
         <!-- Set width of page = device-width -->
         <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-        <link href="kendo/default-main.css" rel="stylesheet" />
         <script src="../assets/js/jquery-3.7.1.min.js"></script>
-        <script src="kendo/kendo.all.min.js"></script>
         <style>
           table {
             border-collapse: collapse; /* Collapses borders into a single line */
@@ -16,18 +14,18 @@
         </style>
     </head>
     <body>
-      <h1> Kendo Grid </h1>
-      <div id="grid1"></div>
-      <div id="grid2"></div>
+      <h1> Basic table demo </h1>
       <table id="basicTable">
         <tr>
           <th>School</th>
           <th>Class</th>
           <th>Name</th>
         </tr>
-        <tbody id="mp-hqv">
-          <tr data-st="IP" id="mp-12">
-            <td rowspan="4">HQV</td>
+        <tbody data-mp="hqv">
+          <tr>
+            <td rowspan="5">HQV</td>
+          </tr>
+          <tr data-st="DO" id="mp-12">
             <td>12C3</td>
             <td>Toan</td>
           </tr>
@@ -43,7 +41,7 @@
             <td colspan="2"><button id="show1">Show/Hide</button></td>
           </tr>
         </tbody>
-        <tbody id="mp-hsgs">
+        <tbody data-mp="hsgs">
           <tr data-st="IP">
             <td rowspan="3">HSGS</td>
             <td>12C1</td>
@@ -54,10 +52,10 @@
             <td>Duy Anh</td>
           </tr>
           <tr>
-            <td colspan="2"><button id="show2">Show/Hide</button></td>
+            <td colspan="2"><button onclick="hideMp('hsgs')">Show/Hide</button></td>
           </tr>
         </tbody>
       </table>
-      <script src="./grid.js"></script>
+      <script src="./basicTable.js"></script>
     </body>
 </html>
