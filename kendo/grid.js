@@ -1,14 +1,15 @@
 var prevData = null;
+var hideMpSet = new Set();
+var originalData;
 var myData = [
-  { school: 'HQV', name:'Toan', status:'IP'},
-  { school: 'HQV', name:'Oanh', status:'DO'},
-  { school: 'HQV', name:'Loc', status:'DO'},
-  { school: 'HQV', name:'Quang Linh', status:'DO'},
-  { school: 'HSGS', name:'Anh', status:'DO'},
-  { school: 'HSGS', name:'Dat', status:'IP'},
-  { school: 'HSGS', name:'Tien', status:'IP'}
+  { school: 'HQV', name:'Toan', status:'IP',prdOrder:1, numSeq:4},
+  { school: 'HQV', name:'Oanh', status:'TO',prdOrder:2, numSeq:4},
+  { school: 'HQV', name:'Loc', status:'DO',prdOrder:3, numSeq:4},
+  { school: 'HQV', name:'Quang Linh', status:'DO',prdOrder:4, numSeq:4},
+  { school: 'HSGS', name:'Anh', status:'DO',prdOrder:1, numSeq:3},
+  { school: 'HSGS', name:'Dat', status:'IP',prdOrder:2, numSeq:3},
+  { school: 'HSGS', name:'Tien', status:'IP',prdOrder:3, numSeq:3}
 ];
-var hideMp = new Set();
 function drawGrid1() { // Rows template
   var myDataSource = new kendo.data.DataSource({
     data: myData,
@@ -43,6 +44,9 @@ function formatRow(data) {
   html += '<td>'+data.name+'</td>';
   html += '<td>'+data.status+'</td>';
   html += '</tr>';
+  if (data.prdOrder == data.numSeq) {
+    html +='<tr><td colspan="3" onclick="hideMp(\''+data.school+'\')">Hide/Show</td></tr>';
+  }
   prevData = data;
   return html;
 }
@@ -53,17 +57,22 @@ function filter() {
     operator: "eq",
     value: "IP"
   });*/
-  var originalData = grid.dataSource.data();
-  var filteredData = originalData.filter(myCustomFilter);
+  originalData = grid.dataSource.data();
+  let filteredData = originalData.filter(hideCondition);
   grid.dataSource.data(filteredData);
 }
 function hideMp(mpNo) {
-  if (!hideMp.has(mpNo)) {
-    hideMp.add(mpNo);
+  console.log('Hide MP %s',mpNo);
+  if (!hideMpSet.has(mpNo)) {
+    hideMpSet.add(mpNo);
+    var grid = $("#grid1").data("kendoGrid");
+    var originalData = grid.dataSource.data();
+    var filteredData = originalData.filter(hideCondition);
+    grid.dataSource.data(filteredData);
   }
 }
-function myCustomFilter(item) {
-  return item.school != 'HQV' || item.status == 'IP';
+function hideCondition(item) {
+  return !hideMpSet.has(item.school) || item.status != 'DO';
 }
 
 function drawGrid2() { // Column template
@@ -138,6 +147,6 @@ $("#show1").click(function() {
   });
 $(document).ready(function() {
   drawGrid1();
-  filter();
+  //filter();
   // drawGrid2();
 });
