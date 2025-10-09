@@ -1,62 +1,63 @@
 <html>
     <head>
-        <title>Test Kendo UI</title>
+        <title>Kendo Grid</title>
         <!-- Set width of page = device-width -->
         <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
         <link href="kendo/default-main.css" rel="stylesheet" />
         <script src="../assets/js/jquery-3.7.1.min.js"></script>
         <script src="kendo/kendo.all.min.js"></script>
+        <style>
+          table {
+            border-collapse: collapse; /* Collapses borders into a single line */
+          }
+          table, th, td {
+            border: 1px solid black; /* 1px solid black border */
+          }
+        </style>
     </head>
     <body>
-        <nav class="navbar navbar-expand-sm bg-danger">
-            <div class="container-fluid">
-              <!-- Links -->
-              <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="/">Home</a>
-                  </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="/store">Store</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="/kendo">Kendo</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="/about">About</a>
-                </li>
-              </ul>
-            </div>  
-        </nav>
-        <h1> Test Kendo UI </h1>
-        <input id="datepicker" />
-        <table id="basicTable">
-          <colgroup>
-            <col />
-            <col />
-          </colgroup>
-          <thead>
-              <tr>
-                  <th data-field="make">SmartPhone</th>
-                  <th data-field="model">Top</th>
-              </tr>
-          </thead>
-          <tbody>
-              <tr>
-                  <td>Lumia 550 </td>
-                  <td>10</td>
-              </tr>
-              <tr>
-                  <td>Galaxy A54 </td>
-                  <td>1</td>
-              </tr>
-              <tr>
-                  <td>Galaxy Y </td>
-                  <td>2</td>
-              </tr>
-          </tbody>
-      </table>
-      <button id="createTable"> Create Table </button>
+      <h1> Kendo Grid </h1>
+      <div id="grid1"></div>
       <div id="grid2"></div>
-        <script src="./kendo.js"></script>
+      <table id="basicTable">
+        <tr>
+          <th>School</th>
+          <th>Class</th>
+          <th>Name</th>
+        </tr>
+        <tbody id="mp-hqv">
+          <tr data-st="IP" id="mp-12">
+            <td rowspan="4">HQV</td>
+            <td>12C3</td>
+            <td>Toan</td>
+          </tr>
+          <tr data-st="IP">
+            <td>12C2</td>
+            <td>Oanh</td>
+          </tr>
+          <tr data-st="DO">
+            <td>12C5</td>
+            <td>Loc</td>
+          </tr>
+          <tr>
+            <td colspan="2"><button id="show1">Show/Hide</button></td>
+          </tr>
+        </tbody>
+        <tbody id="mp-hsgs">
+          <tr data-st="IP">
+            <td rowspan="3">HSGS</td>
+            <td>12C1</td>
+            <td>Dat</td>
+          </tr>
+          <tr data-st="DO">
+            <td>12C1</td>
+            <td>Duy Anh</td>
+          </tr>
+          <tr>
+            <td colspan="2"><button id="show2">Show/Hide</button></td>
+          </tr>
+        </tbody>
+      </table>
+      <script src="./index.js"></script>
     </body>
 </html>

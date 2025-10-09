@@ -1,14 +1,20 @@
-var prevData = null;
-var hideMpSet = new Set();
+var prevRow = null;
+var hideSchoolSet = new Set();
+var maxOrderSchool = new Map();
+var numDoneTask = new Map();
 var originalData;
 var myData = [
-  { school: 'HQV', name:'Toan', status:'IP',prdOrder:1, numSeq:4},
-  { school: 'HQV', name:'Oanh', status:'TO',prdOrder:2, numSeq:4},
-  { school: 'HQV', name:'Loc', status:'DO',prdOrder:3, numSeq:4},
-  { school: 'HQV', name:'Quang Linh', status:'DO',prdOrder:4, numSeq:4},
-  { school: 'HSGS', name:'Anh', status:'DO',prdOrder:1, numSeq:3},
-  { school: 'HSGS', name:'Dat', status:'IP',prdOrder:2, numSeq:3},
-  { school: 'HSGS', name:'Tien', status:'IP',prdOrder:3, numSeq:3}
+  { school: 'HQV', name:'Toan', status:'IP',order:1},
+  { school: 'HQV', name:'Oanh', status:'DO',order:2},
+  { school: 'HQV', name:'Loc', status:'DO',order:3},
+  { school: 'HQV', name:'Quang Linh', status:'DO',order:4},
+  { school: 'HQV', name:'me Thoi', status:'IP',order:5},
+  { school: 'HQV', name:'cau Loi', status:'DO',order:6},
+  { school: 'HQV', name:'cau Thang', status:'DO',order:7},
+  { school: 'HSGS', name:'Duy Anh', status:'DO',order:1},
+  { school: 'HSGS', name:'anh Dat', status:'DO',order:2},
+  { school: 'HSGS', name:'Tien K61T', status:'DO',order:3},
+  { school: 'HSGS', name:'Tat Dung', status:'DO',order:4}
 ];
 function drawGrid1() { // Rows template
   var myDataSource = new kendo.data.DataSource({
@@ -29,50 +35,73 @@ function drawGrid1() { // Rows template
       ],
       rowTemplate: (data) => formatRow(data)
   });
+  var grid = $("#grid1").data("kendoGrid");
+  originalData = grid.dataSource.data();
+  console.log('Original '+JSON.stringify(originalData));
+  for(let e of originalData) {
+    console.log('LOOP order school ',e.school, ' ',e.order);
+    maxOrderSchool.set(e.school, e.order);
+  }
+  grid.refresh();
 }
 function formatRow(data) {
   let html = '<tr>';
-  if (prevData == null || data.school != prevData.school) {
+  if (prevRow == null || data.school != prevRow.school) {
     var grid = $("#grid1").data("kendoGrid");
     var viewData = grid.dataSource.view();
     let cnt = 0;
     for(const e of viewData) {
       if (e.school === data.school) cnt++;
     }
-    html += '<td rowspan="'+cnt+'">'+data.school+'</td>';
+    html += '<td rowspan="'+(cnt+1)+'">'+data.school+'</td>';
   }
   html += '<td>'+data.name+'</td>';
   html += '<td>'+data.status+'</td>';
   html += '</tr>';
-  if (data.prdOrder == data.numSeq) {
-    html +='<tr><td colspan="3" onclick="hideMp(\''+data.school+'\')">Hide/Show</td></tr>';
+  console.log('Add button ',data.order,' ',maxOrderSchool.get(data.school));
+  if (data.order == maxOrderSchool.get(data.school)) {
+    html +='<tr><td style="background: red;" colspan="2" onclick="hideMp(\''+data.school+'\')">Hide/Show</td></tr>';
   }
-  prevData = data;
+  prevRow = data;
   return html;
 }
 function filter() {
   var grid = $("#grid1").data("kendoGrid");
-  /*grid.dataSource.filter({
-    field: "status",
-    operator: "eq",
-    value: "IP"
-  });*/
-  originalData = grid.dataSource.data();
   let filteredData = originalData.filter(hideCondition);
   grid.dataSource.data(filteredData);
 }
 function hideMp(mpNo) {
   console.log('Hide MP %s',mpNo);
-  if (!hideMpSet.has(mpNo)) {
-    hideMpSet.add(mpNo);
+  prevRow = null;
+  maxOrderSchool.clear();
+  numDoneTask.clear();
+  if (!hideSchoolSet.has(mpNo)) {
+    hideSchoolSet.add(mpNo);
     var grid = $("#grid1").data("kendoGrid");
-    var originalData = grid.dataSource.data();
-    var filteredData = originalData.filter(hideCondition);
+    var filteredData = originalData.filter(filterCondition);
+    grid.dataSource.data(filteredData);
+  } else {
+    hideSchoolSet.delete(mpNo);
+    var grid = $("#grid1").data("kendoGrid");
+    var filteredData = originalData.filter(filterCondition);
     grid.dataSource.data(filteredData);
   }
 }
-function hideCondition(item) {
-  return !hideMpSet.has(item.school) || item.status != 'DO';
+function filterCondition(item) {
+  let show = !hideSchoolSet.has(item.school) || item.status != 'DO';
+  let doneTaskCnt = numDoneTask.get(item.school) || 0;
+  if (!show && doneTaskCnt<3) {
+    show = true;
+    doneTaskCnt ++;
+    numDoneTask.set(item.school, doneTaskCnt);
+  }
+  if (show) {
+    if (!maxOrderSchool.has(item.school) || maxOrderSchool.get(item.school)<item.order) {
+      maxOrderSchool.set(item.school, item.order);
+    }
+  }
+  prevRow = item;
+  return show;
 }
 
 function drawGrid2() { // Column template
