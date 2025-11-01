@@ -37,6 +37,7 @@ class MyTable {
 }
 $(document).ready(function() {
     console.log('Document ready');
+    // Cookie only work in Live Server, not work with static HTML local
     $('#msg').val(Cookies.get('txt'));
 });
 $("#testBtn").click(function() {
@@ -60,7 +61,6 @@ $("#addClassBtn").click(function() {
     hello.classList.add("hidden");
 });
 $('#msg').on('input', function() {
-    console.log('Message change '+$('#msg').val());
     Cookies.set('txt',$('#msg').val(),{ expires: 7, path: '/' });
     console.log('Cookie:', Cookies.get('txt'));
 });
