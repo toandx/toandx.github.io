@@ -37,6 +37,7 @@ class MyTable {
 }
 $(document).ready(function() {
     console.log('Document ready');
+    $('#msg').val(Cookies.get('txt'));
 });
 $("#testBtn").click(function() {
     alert("Click button");
@@ -57,7 +58,11 @@ $("#genTable").click(function() {
 $("#addClassBtn").click(function() {
     const hello = document.getElementById("hello");
     hello.classList.add("hidden");
-    console.log('Add Class');
+});
+$('#msg').on('input', function() {
+    console.log('Message change '+$('#msg').val());
+    Cookies.set('txt',$('#msg').val(),{ expires: 7, path: '/' });
+    console.log('Cookie:', Cookies.get('txt'));
 });
 function sendPost() {
     $.ajax({
