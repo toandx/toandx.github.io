@@ -7,10 +7,18 @@
         <!-- Add Bootstrap -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="../assets/css/common.css">
         <style>
           body {
             display: flex;
             flex-direction: column;
+          }
+          #encode {
+            height: 90vh;
+            display: flex;
+            flex-direction: row;
+            padding: 10px;
+            gap: 8px;
           }
         </style>
     </head>
@@ -28,14 +36,20 @@
                 <li class="nav-item">
                   <a class="nav-link" href="/about">About</a>
                 </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/encode">Encode</a>
+                </li>
               </ul>
             </div>  
         </nav>
-        <textarea id="input" style="width: 100%; height: 40%" placeholder="Input"></textarea>
-        <button id="btn-encode"> UTF8 -> Base64 </button>
-        <button id="btn-decode"> Base64 -> UTF8 </button>
-        <textarea id="output" style="width: 100%; height: 40%" placeholder="Output"></textarea>
-
+        <div id="encode">
+          <textarea id="input" class="form-control" style="width: 45%; height: 100%" placeholder="Input"></textarea>
+          <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 8px;">
+            <button id="btn-encode" class="my-btn"> UTF8 -> Base64 </button>
+            <button id="btn-decode" class="my-btn"> Base64 -> UTF8 </button>
+          </div>
+          <textarea id="output" class="form-control" style="width: 45%; height: 100%" placeholder="Output"></textarea>
+        </div>
         <script src="encode.js"></script>
     </body>
 </html>
