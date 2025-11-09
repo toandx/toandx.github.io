@@ -1,4 +1,4 @@
 // import { Person } from "./Person.js"; // Only can use if import type="module" and Open With Live Server
 
 const p = new Person("Charlie", 22);
-alert(p.greet());
+console.log(p.greet());
