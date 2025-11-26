@@ -36,3 +36,12 @@ async function encodeSha512(str) {
   const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
   return hashHex;
 }
+
+$(document).ready(function() {
+  // Solution 1: User hide MP 1, BM 2, 5,6
+  hideMpDegree = new Map();
+  hideMpDegree.set(1,[2,5,6]);
+  hideMpDegree.set(2,[2,3,4]);
+  console.log('test 1:',hideMpDegree.has(3),' ',hideMpDegree.has(1));
+  console.log('test 2:',hideMpDegree.get(1).indexOf(2),' ',hideMpDegree.get(1).indexOf(4));
+});
