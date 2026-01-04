@@ -10,3 +10,14 @@
 .my-btn:hover {
   background-color: #198754; /* Darker green */
 }
+/* Style for Desktop and Mobile */
+@media screen and (max-width:768px) {
+    .desktop {
+        display: none;
+    }
+}
+@media screen and (min-width:769px) {
+    .mobile {
+        display: none;
+    }
+}
