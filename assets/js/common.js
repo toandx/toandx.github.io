@@ -1,0 +1,44 @@
+$(document).ready(function() {
+    console.log('Document ready');
+    renderNavbar('#topNav');
+});
+function renderNavbar(id) {
+  html = `
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/"> ToanDX </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <!-- Links -->
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="demoDropdown" role="button" data-bs-toggle="dropdown"> Demo </a>
+            <ul class="dropdown-menu" aria-labelledby="demoDropdown">
+              <li class="nav-item">
+                <a class="nav-link" href="/about">About</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/store">Store</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/encode">Encode</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/trade">Trade</a>
+          </li>
+        </ul>
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="#">Login</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Sign up</a>
+          </li>
+        </ul>
+      </div>
+    </div>  `;
+  $(id).html(html);
+}
