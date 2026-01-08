@@ -15,6 +15,38 @@ $("#btn-sha512").click(async function() {
   const hash = await encodeSha512(input);
   $("#output").val(hash);
 });
+$("#btn-note").click(async function() {
+  var input = $("#input").val();
+  $.ajax({
+        url: "https://demobackend-htic.onrender.com/api/note",       // Target JSP to handle the request
+        type: "POST",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        data: JSON.stringify({
+          title: "New note",
+          content: input
+        }),
+        success: function(response) {
+            alert('Data received:'+ JSON.stringify(response));
+        },
+        error: function(error) {
+            alert('Error:'+JSON.stringify(error));
+        }
+    });
+});
+$("#btn-ping").click(async function() {
+  $.ajax({
+        url: "https://demobackend-htic.onrender.com/api/hello",       // Target JSP to handle the request
+        type: "POST",
+        success: function(response) {
+            console.log('Data received: '+ response);
+            alert('Ping OK');
+        },
+        error: function(error) {
+            alert('Wait for Backend prepare '+error);
+        }
+    });
+});
 function utf8ToBase64(str) {
   return btoa(unescape(encodeURIComponent(str)));
 }
