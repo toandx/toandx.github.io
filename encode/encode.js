@@ -37,9 +37,9 @@ $("#btn-note").click(async function() {
 $("#btn-ping").click(async function() {
   $.ajax({
         url: "https://demobackend-htic.onrender.com/api/hello",       // Target JSP to handle the request
-        type: "POST",
+        type: "GET",
         success: function(response) {
-            console.log('Data received: '+ response);
+            console.log('Data received: '+ JSON.stringify(response));
             alert('Ping OK');
         },
         error: function(error) {

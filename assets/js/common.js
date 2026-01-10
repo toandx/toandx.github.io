@@ -23,8 +23,16 @@ function renderNavbar(id) {
               </li>
             </ul>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/encode">Encode</a>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="demoDropdown" role="button" data-bs-toggle="dropdown"> Tool </a>
+            <ul class="dropdown-menu" aria-labelledby="demoDropdown">
+              <li class="nav-item">
+                <a class="nav-link" href="/encode">Encode</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/note">Note</a>
+              </li>
+            </ul>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/trade">Trade</a>
