@@ -16,9 +16,6 @@ function renderNavbar(id) {
             <a class="nav-link dropdown-toggle" href="#" id="demoDropdown" role="button" data-bs-toggle="dropdown"> Demo </a>
             <ul class="dropdown-menu" aria-labelledby="demoDropdown">
               <li class="nav-item">
-                <a class="nav-link" href="/about">About</a>
-              </li>
-              <li class="nav-item">
                 <a class="nav-link" href="/store">Store</a>
               </li>
             </ul>
