@@ -1,10 +1,9 @@
-const beUrl = 'https://demobackend-htic.onrender.com/api';
-// const beUrl = 'http://localhost:8081/api';
 var noteData = [];
+var jwt = '';
 var selectedNote = null;
 $("#btnPing").click(async function() {
   $.ajax({
-        url: beUrl+"/hello",       // Target JSP to handle the request
+        url: commonConfig.beUrl+"/api/hello",       // Target JSP to handle the request
         type: "GET",
         success: function(response) {
             console.log('Data received: '+ JSON.stringify(response));
@@ -19,10 +18,11 @@ $("#btnAdd").click(async function() {
   var titleVal = $("#title").val();
   var contentVal = $("#content").val();
   $.ajax({
-        url: beUrl+"/note",       // Target JSP to handle the request
+        url: commonConfig.beUrl+"/api/note",       // Target JSP to handle the request
         type: "POST",
         contentType: "application/json; charset=utf-8",
         dataType: "json",
+        headers: {"Authorization":"Bearer "+jwt},
         data: JSON.stringify({ // Use JSON.stringify for Request Body
           title: titleVal,
           content: contentVal
@@ -40,15 +40,22 @@ $(document).ready(function() {
   refresh();
 });
 function refresh() {
+    jwt = localStorage.getItem('jwt');
+    console.log('JWT: '+jwt);
+    if (jwt == null) {
+        alert('You need login');
+        window.location.href = '/login';
+    }
     let $listNote = $('#listNote');
     $listNote.empty();
     $("#title").val('');
     $("#content").val('');
     let html = '';
     $.ajax({
-        url: beUrl+"/note",       // Target JSP to handle the request
+        url: commonConfig.beUrl+"/api/note",       // Target JSP to handle the request
         type: "GET",
         dataType: "json",
+        headers: {"Authorization":"Bearer "+jwt},
         success: function(data) {
             noteData = data;
             for(let note of noteData) {
@@ -57,17 +64,19 @@ function refresh() {
             }
         },
         error: function(error) {
+            alert('JWT expired');
             console.log('Error:'+JSON.stringify(error));
         }
     });    
 }
 function selectNote(id) {
     $.ajax({
-        url: beUrl+"/noteId",       
+        url: commonConfig.beUrl+"/api/noteId",       
         type: "GET",
         data: {
             id: id
         },
+        headers: {"Authorization":"Bearer "+jwt},
         success: function(data) {
             selectedNote = data;
             $("#title").val(selectedNote.title);
@@ -82,9 +91,10 @@ $("#btnUpdate").click(async function() {
   var titleVal = $("#title").val();
   var contentVal = $("#content").val();
   $.ajax({
-        url: beUrl+"/noteId",       // Target JSP to handle the request
+        url: commonConfig.beUrl+"/api/noteId",       // Target JSP to handle the request
         type: "PUT",
         contentType: "application/json; charset=utf-8",
+        headers: {"Authorization":"Bearer "+jwt},
         dataType: "json",
         data: JSON.stringify({ // Use JSON.stringify for Request Body
           id: selectedNote.id,
@@ -101,8 +111,9 @@ $("#btnUpdate").click(async function() {
 });
 $("#btnDel").click(async function() {
   $.ajax({
-        url: beUrl+"/noteId",       // Target JSP to handle the request
+        url: commonConfig.beUrl+"/api/noteId",       // Target JSP to handle the request
         type: "DELETE",
+        headers: {"Authorization":"Bearer "+jwt},
         data: {
             id: selectedNote.id
         },
@@ -116,8 +127,9 @@ $("#btnDel").click(async function() {
 });
 $("#btnDelAll").click(async function() {
   $.ajax({
-        url: beUrl+"/note",       // Target JSP to handle the request
+        url: commonConfig.beUrl+"/api/note",       // Target JSP to handle the request
         type: "DELETE",
+        headers: {"Authorization":"Bearer "+jwt},
         success: function(response) {
             refresh();
         },

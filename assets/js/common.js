@@ -1,9 +1,9 @@
-$(document).ready(function() {
-    console.log('Document ready');
-    renderNavbar('#topNav');
-});
-function renderNavbar(id) {
-  html = `
+const commonConfig = {
+  beUrl : 'http://localhost:8081' //'https://demobackend-htic.onrender.com/api';
+}
+const commonView = {
+  renderNavbar: function(id) {
+    html = `
     <div class="container-fluid">
       <a class="navbar-brand" href="/"> ToanDX </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -42,5 +42,10 @@ function renderNavbar(id) {
         </ul>
       </div>
     </div>  `;
-  $(id).html(html);
+    $(id).html(html);
+  }
 }
+$(document).ready(function() {
+    console.log('Document ready');
+    commonView.renderNavbar('#topNav');
+});
