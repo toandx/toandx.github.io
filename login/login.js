@@ -13,7 +13,7 @@ $("#btn-login").click(async function() {
         success: function(response) {
             console.log('Data received: '+ JSON.stringify(response));
             window.location.href = '/';
-            localStorage.setItem('jwt',response.accessToken);
+            sessionStorage.setItem('jwt',response.accessToken);
         },
         error: function(error) {
             console.log('Wait for Backend prepare '+error);

@@ -40,7 +40,7 @@ $(document).ready(function() {
   refresh();
 });
 function refresh() {
-    jwt = localStorage.getItem('jwt');
+    jwt = sessionStorage.getItem('jwt');
     console.log('JWT: '+jwt);
     if (jwt == null) {
         alert('You need login');

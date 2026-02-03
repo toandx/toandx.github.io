@@ -1,5 +1,5 @@
 const commonConfig = {
-  beUrl : 'http://localhost:8081' //'https://demobackend-htic.onrender.com/api';
+  beUrl : 'https://demobackend-htic.onrender.com' //'http://localhost:8081'
 }
 const commonView = {
   renderNavbar: function(id) {
