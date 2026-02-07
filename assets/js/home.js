@@ -40,14 +40,10 @@ $(document).ready(function() {
     // Cookie only work in Live Server, not work with static HTML local
     $('#msg').val(Cookies.get('txt'));
 });
-$("#testBtn").click(function() {
-    alert("Click button");
-    $(this).hide();
-});
 $("#send").click(function() {
     sendPost();
 });
-$("#alert").click(async function() {
+$("#btn-alert").click(async function() {
     await showAlert("This is a custom alert!", "Custom Theme");
 });
 $("#genTable").click(function() {

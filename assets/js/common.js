@@ -37,15 +37,43 @@ const commonView = {
         </ul>
         <ul class="navbar-nav ms-auto">
           <li class="nav-item">
-            <a class="nav-link" href="/login">Login</a>
+            <span id="txt-hello" class="nav-link" style="cursor:pointer"></span>
+          </li>
+          <li class="nav-item">
+            <a id="btn-login" class="nav-link" href="/login">Login</a>
+          </li>
+          <li class="nav-item">
+            <span id="btn-logout" class="nav-link" style="cursor:pointer">Logout</span>
           </li>
         </ul>
       </div>
     </div>  `;
     $(id).html(html);
+  },
+  refreshNavbar: function() {
+    jwt = sessionStorage.getItem('jwt');
+    console.log('JWT: '+jwt);
+    if (jwt == null) {
+      $('#btn-login').show();
+      $('#btn-logout').hide();
+      $('#txt-hello').text('');
+    } else {
+      $('#btn-login').hide();
+      $('#btn-logout').show();
+      subject = this.base64ToUtf8(jwt.split('.')[1]);
+      console.log('Subject '+JSON.parse(subject).sub);
+      $('#txt-hello').text('Hello '+JSON.parse(subject).sub);
+    }
+  },
+  base64ToUtf8: function(base64Str) {
+    return decodeURIComponent(escape(atob(base64Str)));
   }
 }
 $(document).ready(function() {
-    console.log('Document ready');
     commonView.renderNavbar('#topNav');
+    commonView.refreshNavbar();
+    $("#btn-logout").click(function() { // Function need define after btn-logout is created in HTML. If not, btn-logout not found, event not work
+      sessionStorage.removeItem('jwt');
+      window.location.href = '/login';
+    });
 });
