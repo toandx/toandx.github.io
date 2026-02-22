@@ -44,7 +44,7 @@ $("#send").click(function() {
     sendPost();
 });
 $("#btn-alert").click(async function() {
-    await showAlert("This is a custom alert!", "Custom Theme");
+    await showAlert("", "Happy new year!");
 });
 $("#genTable").click(function() {
     const myTable = new MyTable('Toan');
@@ -74,20 +74,20 @@ function sendPost() {
         }
     });
 }
-function showAlert(message, title = "Alert") {
-  const alertBox = document.getElementById("customAlert");
-  const msg = alertBox.querySelector(".alert-message");
-  const alertTitle = alertBox.querySelector(".alert-title");
+function showAlert(message, title) {
+  const alertBox = $('#customAlert');
+  const msg = alertBox.find('.alert-message');
+  const alertTitle = alertBox.find('.alert-title');
   
-  msg.textContent = message;
-  alertTitle.textContent = title;
-  alertBox.classList.remove("hidden");
+  msg.text(message);
+  alertTitle.text(title);
+  alertBox.removeClass("hidden");
 
   // Wait for user to click OK
   return new Promise(resolve => {
-    document.getElementById("alertOkBtn").onclick = () => {
-      alertBox.classList.add("hidden");
+    $("#alertOkBtn").click(function() {
+      alertBox.addClass("hidden");
       resolve(); // allow async/await usage
-    };
+    })
   });
 }
