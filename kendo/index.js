@@ -174,8 +174,81 @@ $("#show1").click(function() {
       }
     });
   });
+var categories = [
+    { id: 1, name: "Food" },
+    { id: 2, name: "Clothing" }
+  ];
+var brands = [
+    { id: 1, name: "Starbucks", categoryId:1 },
+    { id: 2, name: "Highland", categoryId:1 },
+    { id: 3, name: "Adidas", categoryId:2 },
+    { id: 4, name: "Nike", categoryId:2 },
+  ];
+function drawGrid3() {
+  $("#grid3").kendoGrid({
+  dataSource: {
+    data: [
+      { productName: "Apple", categoryId: 1,brandId:1 },
+      { productName: "Laptop", categoryId: 2,brandId:2 }
+    ],
+    schema: {
+      model: {
+        id: "productName",
+        fields: {
+          productName: { editable: true },
+          categoryId: { editable: true }
+        }
+      }
+    }
+  },
+  editable: "inline",
+  columns: [
+    { field: "productName", title: "Product" },
+    {
+      field: "categoryId",
+      title: "Category",
+      editor: categoryDropDownEditor,
+      template: function(dataItem) {
+        var item = categories.find(c => c.id === dataItem.categoryId);
+        return item ? item.name : "";
+      }
+    },
+    {
+      field: "brandId",
+      title: "Brand",
+      editor: brandEditor,
+      template: function(dataItem) {
+        var item = brands.find(c => c.id === dataItem.brandId);
+        return item ? item.name : "";
+      }
+    },
+    { command: ["edit"], title: "&nbsp;" }
+  ]
+});
+}
+function categoryDropDownEditor(container, options) {
+  $('<input required name="' + options.field + '"/>')
+    .appendTo(container)
+    .kendoDropDownList({
+      dataTextField: "name",
+      dataValueField: "id",
+      dataSource: categories
+    });
+}
+function brandEditor(container, options) {
+  $('<input name="' + options.field + '" id="country"/>')
+    .appendTo(container)
+    .kendoDropDownList({
+      dataTextField: "name",
+      dataValueField: "id",
+      dataSource: brands,
+      cascadeFrom: "categories",          // 👈 IMPORTANT
+      cascadeFromField: "categoryId",     // 👈 match field in countries
+      optionLabel: "Select Brand"
+    });
+}
 $(document).ready(function() {
-  drawGrid1();
+  drawGrid3();
   //filter();
   // drawGrid2();
 });
