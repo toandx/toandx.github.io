@@ -201,7 +201,7 @@ function drawGrid3() {
       }
     }
   },
-  editable: "inline",
+  editable: 'inline',
   columns: [
     { field: "productName", title: "Product" },
     {
@@ -221,13 +221,30 @@ function drawGrid3() {
         var item = brands.find(c => c.id === dataItem.brandId);
         return item ? item.name : "";
       }
-    },
-    { command: ["edit"], title: "&nbsp;" }
+    }
   ]
 });
+  $('#editGridBtn').click(function() {
+    var grid = $("#grid3").data("kendoGrid");
+
+    // Focus first editable cell
+    var firstCell = grid.tbody.find("td:editable:first");
+    grid.current(firstCell);
+    grid.editCell(firstCell);
+
+    // Optional: add visual "editing mode"
+    grid.tbody.find("td").addClass("k-state-selected");
+
+    /*grid.tbody.find("tr").each(function () {
+      grid.editRow(this);
+    });*/
+  });
+  $('#saveGridBtn').click(function() {
+    alert('Save button');
+  });
 }
 function categoryDropDownEditor(container, options) {
-  $('<input required name="' + options.field + '"/>')
+  $('<input required id="cate"/>')
     .appendTo(container)
     .kendoDropDownList({
       dataTextField: "name",
@@ -242,7 +259,7 @@ function brandEditor(container, options) {
       dataTextField: "name",
       dataValueField: "id",
       dataSource: brands,
-      cascadeFrom: "categories",          // 👈 IMPORTANT
+      cascadeFrom: "cate",          // 👈 IMPORTANT
       cascadeFromField: "categoryId",     // 👈 match field in countries
       optionLabel: "Select Brand"
     });
