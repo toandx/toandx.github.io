@@ -31,7 +31,7 @@ function drawGrid3() {
     {
       field: "categoryId",
       title: "Category",
-      editor: categoryDropDownEditor,
+      editor: (container, options) => myDropdown(container, options,categories, 'name', 'id'),
       template: function(dataItem) {
         var item = categories.find(c => c.id === dataItem.categoryId);
         return item ? item.name : "";
@@ -40,7 +40,7 @@ function drawGrid3() {
     {
       field: "brandId",
       title: "Brand",
-      editor: brandEditor,
+      editor: (container, options) => filterDropdown(container, options, brands, 'name','id','categoryId','categoryId'),
       template: function(dataItem) {
         var item = brands.find(c => c.id === dataItem.brandId);
         return item ? item.name : "";
@@ -81,7 +81,7 @@ function categoryDropDownEditor(container, options) {
       }
     });
 }
-function brandEditor(container, options) {
+/*function brandEditor(container, options) {
   var model = options.model;
   console.log('Brand Model:'+JSON.stringify(model));
   $('<input name="' + options.field + '" id="brand"/>')
@@ -97,9 +97,47 @@ function brandEditor(container, options) {
           }
         }
       },
+      change: function() {
+        console.log('select '+this.value());
+        //options.model.set(options.field, this.value());
+
+      },
       //cascadeFrom: "cate",          // 👈 IMPORTANT
       //cascadeFromField: "categoryId",     // 👈 match field in countries
-      optionLabel: "Select Brand"
+    });
+}*/
+function myDropdown(container, options,dataSource, displayField, valueField) {
+  $('<input name="' + options.field + '" id="'+options.field+'"/>')
+    .appendTo(container)
+    .kendoDropDownList({
+      dataTextField: displayField,
+      dataValueField: valueField,
+      dataSource: dataSource
+    });
+}
+function filterDropdown(container, options,dataSource, displayField, valueField, filterField, targetField) {
+  var model = options.model;
+  console.log('Create editor for data '+JSON.stringify(model));
+  $('<input name="' + options.field + '" id="'+options.field+'"/>')
+    .appendTo(container)
+    .kendoDropDownList({
+      dataTextField: displayField,
+      dataValueField: valueField,
+      dataSource: {
+        transport: {
+          read: function(e) {
+            var filtered = dataSource.filter(val => val[filterField] == model[targetField]);
+            e.success(filtered);
+          }
+        }
+      },
+      change: function() {
+        console.log('select '+this.value());
+        //options.model.set(options.field, this.value()); Can update Kendo Grid Data directly or map by use input name=option.fields
+
+      },
+      //cascadeFrom: "cate",          // Only work for editable: 'inline', map cascadeFrom to id of other Kendo DropDown
+      //cascadeFromField: "categoryId",     // map cascadeFromField (field of this dataSource to value of other DropDown)
     });
 }
 $(document).ready(function() {
