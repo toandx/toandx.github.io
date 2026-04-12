@@ -201,13 +201,13 @@ function drawGrid3() {
       }
     }
   },
-  editable: 'inline',
+  editable: true,
   columns: [
     { field: "productName", title: "Product" },
     {
       field: "categoryId",
       title: "Category",
-      editor: categoryDropDownEditor,
+      editor: (container, options) => myDropdown(container, options,categories, 'name', 'id'),
       template: function(dataItem) {
         var item = categories.find(c => c.id === dataItem.categoryId);
         return item ? item.name : "";
@@ -216,7 +216,7 @@ function drawGrid3() {
     {
       field: "brandId",
       title: "Brand",
-      editor: brandEditor,
+      editor: (container, options) => filterDropdown(container, options, brands, 'name','id','categoryId','categoryId'),
       template: function(dataItem) {
         var item = brands.find(c => c.id === dataItem.brandId);
         return item ? item.name : "";
@@ -224,23 +224,12 @@ function drawGrid3() {
     }
   ]
 });
-  $('#editGridBtn').click(function() {
-    var grid = $("#grid3").data("kendoGrid");
-
-    // Focus first editable cell
-    var firstCell = grid.tbody.find("td:editable:first");
-    grid.current(firstCell);
-    grid.editCell(firstCell);
-
-    // Optional: add visual "editing mode"
-    grid.tbody.find("td").addClass("k-state-selected");
-
-    /*grid.tbody.find("tr").each(function () {
-      grid.editRow(this);
-    });*/
-  });
   $('#saveGridBtn').click(function() {
-    alert('Save button');
+    const grid = $("#grid3").data("kendoGrid");
+    const allData = grid.dataSource.data();
+    console.log('All data:'+JSON.stringify(allData));
+    const updatedData = grid.dataSource.data().filter(item => item.dirty);
+    alert('Updated Data:'+JSON.stringify(updatedData));
   });
 }
 function categoryDropDownEditor(container, options) {
@@ -262,6 +251,40 @@ function brandEditor(container, options) {
       cascadeFrom: "cate",          // 👈 IMPORTANT
       cascadeFromField: "categoryId",     // 👈 match field in countries
       optionLabel: "Select Brand"
+    });
+}
+function myDropdown(container, options,dataSource, displayField, valueField) {
+  $('<input name="' + options.field + '" id="'+options.field+'"/>')
+    .appendTo(container)
+    .kendoDropDownList({
+      dataTextField: displayField,
+      dataValueField: valueField,
+      dataSource: dataSource
+    });
+}
+function filterDropdown(container, options,dataSource, displayField, valueField, filterField, targetField) {
+  var model = options.model;
+  console.log('Create editor for data '+JSON.stringify(model));
+  $('<input name="' + options.field + '" id="'+options.field+'"/>')
+    .appendTo(container)
+    .kendoDropDownList({
+      dataTextField: displayField,
+      dataValueField: valueField,
+      dataSource: {
+        transport: {
+          read: function(e) {
+            var filtered = dataSource.filter(val => val[filterField] == model[targetField]);
+            e.success(filtered);
+          }
+        }
+      },
+      change: function() {
+        console.log('select '+this.value());
+        //options.model.set(options.field, this.value()); Can update Kendo Grid Data directly or map by use input name=option.fields
+
+      },
+      //cascadeFrom: "cate",          // Only work for editable: 'inline', map cascadeFrom to id of other Kendo DropDown
+      //cascadeFromField: "categoryId",     // map cascadeFromField (field of this dataSource to value of other DropDown)
     });
 }
 $(document).ready(function() {
