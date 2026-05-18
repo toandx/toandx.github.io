@@ -46,6 +46,10 @@ $("#send").click(function() {
 $("#btn-alert").click(async function() {
     await showAlert("", "Happy new year!");
 });
+$("#popupBtn").click(async function() {
+    console.log('Click button');
+    await showAlertLink('#dataPopup');
+});
 $("#genTable").click(function() {
     const myTable = new MyTable('Toan');
     console.log(myTable.render());
@@ -59,6 +63,12 @@ $("#addClassBtn").click(function() {
 $('#msg').on('input', function() {
     Cookies.set('txt',$('#msg').val(),{ expires: 7, path: '/' });
     console.log('Cookie:', Cookies.get('txt'));
+});
+$("#genTable").click(function() {
+    const myTable = new MyTable('Toan');
+    console.log(myTable.render());
+    // $('#newTable').html(myTable.render());
+    $('#newTable').html(myTable.getNote());
 });
 function sendPost() {
     $.ajax({
@@ -86,6 +96,19 @@ function showAlert(message, title) {
   // Wait for user to click OK
   return new Promise(resolve => {
     $("#alertOkBtn").click(function() {
+      alertBox.addClass("hidden");
+      resolve(); // allow async/await usage
+    })
+  });
+}
+
+function showAlertLink(id) {
+  const alertBox = $(id);
+  alertBox.removeClass("hidden");
+
+  // Wait for user to click OK
+  return new Promise(resolve => {
+    $("#btn-close").click(function() {
       alertBox.addClass("hidden");
       resolve(); // allow async/await usage
     })
